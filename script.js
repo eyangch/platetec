@@ -1,13 +1,11 @@
-const w = 1280, h = 720;
+const w = 640, h = 420;
 var tarr = ["continental/continental", "continental/oceanic", "oceanic/oceanic"];
 var type = ["continental/continental", "continental/oceanic", "oceanic/oceanic"];
 var gui;
-var cc, co, oo;
+var cc, co, oo, ccc, cco, dcc, doo, tccup, tccdown;
+var instruc;
 
-function setup(){
-    createCanvas(640, 480);
-    gui = createGui();
-    gui.addGlobals("type");
+function preload() {
     cc = loadImage("https://eyangch.github.io/platetec/img/cc.png");
     co = loadImage("https://eyangch.github.io/platetec/img/co.png");
     oo = loadImage("https://eyangch.github.io/platetec/img/oo.png");
@@ -19,25 +17,35 @@ function setup(){
     tccdown = loadImage("https://eyangch.github.io/platetec/img/tccdown.png");
 }
 
+function setup(){
+    createCanvas(w, h);
+    gui = createGui();
+    gui.addGlobals("type");
+gui.setPosition(20, 50);
+    instruc = document.createElement("div");
+    document.body.appendChild(instruc);
+}
+
 function draw(){
     var conv = false, divr = false, utra = false, dtra = false;
-    var x = 0, y = 0;
+    var ox = 0, oy = 0;
+    var x = ox, y = oy;
     background(255);
     text(type, 50, 50);
-    if(keyIsDown(RIGHT_ARROW)){
+    if(keyIsDown("D".charCodeAt())){
         conv = true;
-    }else if(keyIsDown(LEFT_ARROW)){
+    }else if(keyIsDown("A".charCodeAt())){
         divr = true;
-    }else if(keyIsDown(UP_ARROW)){
+    }else if(keyIsDown("W".charCodeAt())){
         utra = true;
-    }else if(keyIsDown(DOWN_ARROW)){
+    }else if(keyIsDown("S".charCodeAt())){
         dtra = true;
     }
     if(conv){
-        y = random() * 5;
+        y += random() * 5;
     }
     if(utra || dtra){
-        y = random() * 20;
+        y += random() * 20;
     }
     if(type == tarr[0]){
         if(conv){
@@ -49,19 +57,22 @@ function draw(){
         }else if(dtra){
             image(tccdown, x, y);        
         }else{
-            image(cc, 0, 0);
+            image(cc, ox, oy);
         }
+        instruc.innerHTML = "W/A/S/D are all available for this plate boundary."
     }else if(type == tarr[1]){
         if(conv){
             image(cco, x, y);
         }else{
-            image(co, 0, 0);
+            image(co, ox, oy);
         }
+        instruc.innerHTML = "Only D is available for this plate boundary."
     }else{
         if(divr){
             image(doo, x, y);
         }else{
-            image(oo, 0, 0);
+            image(oo, ox, oy);
         }
+        instruc.innerHTML = "Only A is available for this plate boundary."
     }
 }
